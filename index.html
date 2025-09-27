@@ -56,41 +56,91 @@
     .spotify-embed {
       margin: 36px 0;
     }
-    /* Bouquet Maker Styles */
+
+    /* Bouquet Palette */
     .bouquet-section-title {
       color: #e75480;
       margin-top: 38px;
       font-size: 1.35rem;
       letter-spacing: 1px;
     }
-    .flower-btns {
-      margin: 17px auto 8px auto;
+    .flower-palette {
+      margin: 18px auto 8px auto;
       display: flex;
       flex-wrap: wrap;
-      gap: 14px;
+      gap: 18px;
       justify-content: center;
     }
-    .flower-btn {
+    .palette-flower {
+      font-size: 2.4rem;
       background: #fff;
       border: 2px solid #e75480;
-      border-radius: 8px;
-      font-size: 2rem;
-      padding: 8px 12px;
-      cursor: pointer;
-      transition: transform 0.12s, background 0.15s;
+      border-radius: 11px;
+      padding: 9px 12px;
+      cursor: grab;
+      user-select: none;
+      transition: transform 0.18s, border 0.18s;
     }
-    .flower-btn:hover {
-      transform: scale(1.10);
-      background: #ffd1eb;
+    .palette-flower:active {
+      transform: scale(1.08);
       border-color: #c93e68;
     }
+    /* Bouquet Area */
+    .bouquet-dropzone {
+      position: relative;
+      margin: 28px auto 0 auto;
+      width: 230px;
+      height: 210px;
+      background: rgba(255,240,250,.2);
+      border-radius: 30px 30px 70px 70px;
+      border: 2.5px dashed #e75480;
+      box-shadow: 0 9px 28px #e754801a;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      overflow: visible;
+    }
+    .bouquet-wrap {
+      position: absolute;
+      left: 62px;
+      bottom: 0;
+      width: 106px;
+      height: 54px;
+      background: #f9e9fa;
+      border-radius: 40px 40px 70px 70px;
+      border: 3px solid #e6c3d0;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .bouquet-flower-draggable {
+      position: absolute;
+      font-size: 2.5rem;
+      cursor: pointer;
+      filter: drop-shadow(0 2px 8px #ee6d8b44);
+      transition: transform 0.2s;
+      z-index: 2;
+      pointer-events: none; /* prevent accidental drag-select after dropping */
+    }
+    .bouquet-stem {
+      position: absolute;
+      width: 10px;
+      height: 70px;
+      background: linear-gradient(180deg, #63c551 80%, #5c4f3c 100%);
+      border-radius: 7px;
+      left: 50%;
+      margin-left: -5px;
+      bottom: 48px;
+      z-index: 1;
+      pointer-events: none;
+      transform-origin: top center;
+    }
     .clear-btn {
-      margin: 14px auto 18px auto;
+      margin: 18px auto 18px auto;
       display: block;
       background: #e75480;
       color: #fff;
       font-size: 1rem;
-      padding: 8px 22px;
+      padding: 9px 22px;
       border: none;
       border-radius: 12px;
       cursor: pointer;
@@ -99,55 +149,6 @@
     }
     .clear-btn:hover {
       background: #c93e68;
-    }
-    /* Bouquet Display */
-    .bouquet-display {
-      position: relative;
-      width: 190px;
-      height: 180px;
-      margin: 24px auto 0 auto;
-      display: flex;
-      justify-content: center;
-    }
-    .bouquet-cluster {
-      position: absolute;
-      left: 0; top: 0;
-      width: 190px;
-      height: 110px;
-      z-index: 2;
-    }
-    .bouquet-flower {
-      position: absolute;
-      font-size: 2.8rem;
-      filter: drop-shadow(0 2px 8px #ee6d8b44);
-      cursor: pointer;
-      user-select: none;
-      transition: transform 0.2s;
-    }
-    .bouquet-stems {
-      position: absolute;
-      left: 94px; top: 80px;
-      width: 42px;
-      height: 80px;
-      z-index: 1;
-    }
-    .bouquet-stem {
-      position: absolute;
-      left: 14px;
-      width: 8px;
-      height: 74px;
-      background: linear-gradient(180deg, #63c551 80%, #5c4f3c 100%);
-      border-radius: 6px;
-      filter: blur(0.1px);
-    }
-    .bouquet-wrap {
-      position: absolute;
-      left: 58px; top: 124px;
-      width: 60px; height: 32px;
-      background: #f9e9fa;
-      border-radius: 20px 20px 50px 50px;
-      border: 3px solid #e6c3d0;
-      z-index: 3;
     }
   </style>
 </head>
@@ -175,52 +176,79 @@
   <div class="spotify-embed">
     <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/4eyLx49mYcIkl7AIGsKtTn?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
   </div>
+
   <div>
-    <div class="bouquet-section-title">Make your own bouquet, Mana! 💐</div>
-    <div class="flower-btns">
-      <button class="flower-btn" onclick="addFlower('🌹')">🌹 Rose</button>
-      <button class="flower-btn" onclick="addFlower('🌻')">🌻 Sunflower</button>
-      <button class="flower-btn" onclick="addFlower('🌷')">🌷 Tulip</button>
-      <button class="flower-btn" onclick="addFlower('💐')">💐 Mixed</button>
-      <button class="flower-btn" onclick="addFlower('🥀')">🥀 Love</button>
-      <button class="flower-btn" onclick="addFlower('🌸')">🌸 Sakura</button>
-      <button class="flower-btn" onclick="addFlower('🌼')">🌼 Daisy</button>
+    <div class="bouquet-section-title">Make your own bouquet, Mana! 💐 (Drag flowers below)</div>
+    <div class="flower-palette">
+      <div class="palette-flower" draggable="true" data-flower="🌹">🌹</div>
+      <div class="palette-flower" draggable="true" data-flower="🌻">🌻</div>
+      <div class="palette-flower" draggable="true" data-flower="🌷">🌷</div>
+      <div class="palette-flower" draggable="true" data-flower="💐">💐</div>
+      <div class="palette-flower" draggable="true" data-flower="🥀">🥀</div>
+      <div class="palette-flower" draggable="true" data-flower="🌸">🌸</div>
+      <div class="palette-flower" draggable="true" data-flower="🌼">🌼</div>
     </div>
-    <div class="bouquet-display">
-      <div class="bouquet-cluster" id="bouquetCluster"></div>
-      <div class="bouquet-stems" id="bouquetStems"></div>
+    <div class="bouquet-dropzone" id="bouquetDropzone">
+      <!-- Flowers and stems appear here -->
       <div class="bouquet-wrap"></div>
     </div>
     <button class="clear-btn" onclick="clearBouquet()">Clear Bouquet</button>
   </div>
 
   <script>
-    function addFlower(emoji) {
-      const cluster = document.getElementById('bouquetCluster');
-      const stems = document.getElementById('bouquetStems');
-      const flowersCount = cluster.children.length;
-      // Flowers arranged in a circular cluster for a real bouquet look
-      const max = 10, radius = 44;
-      let angle = ((flowersCount % max) / max) * 2 * Math.PI - Math.PI / 2;
-      let cx = 82 + radius * Math.cos(angle), cy = 44 + radius * Math.sin(angle);
-      // Flower (top)
+    // DRAG+DROP LOGIC FOR BOUQUET
+    const dropzone = document.getElementById('bouquetDropzone');
+    let dragFlower = null;
+
+    document.querySelectorAll('.palette-flower').forEach(el => {
+      el.addEventListener('dragstart', function(e) {
+        dragFlower = this.getAttribute('data-flower');
+      });
+    });
+    dropzone.addEventListener('dragover', function(e) {
+      e.preventDefault();
+    });
+    dropzone.addEventListener('drop', function(e) {
+      e.preventDefault();
+      if (!dragFlower) return;
+
+      // Calculate position relative to dropzone
+      const rect = dropzone.getBoundingClientRect();
+      let x = e.clientX - rect.left;
+      let y = e.clientY - rect.top;
+      // Clamp so flowers don't go wildly outside bounds
+      x = Math.max(30, Math.min(x, rect.width-30));
+      y = Math.max(20, Math.min(y, rect.height-60));
+
+      // FLOWER HEAD
       const flower = document.createElement('div');
-      flower.className = 'bouquet-flower';
-      flower.textContent = emoji;
-      flower.style.left = `${cx}px`;
-      flower.style.top = `${cy}px`;
-      flower.style.transform = `rotate(${(Math.random()-0.5)*26}deg) scale(1.08)`;
-      cluster.appendChild(flower);
-      // Stem (goes to center-bottom)
+      flower.className = 'bouquet-flower-draggable';
+      flower.textContent = dragFlower;
+      flower.style.left = (x-23) + 'px';
+      flower.style.top = (y-25) + 'px';
+      dropzone.appendChild(flower);
+
+      // STEM: from flower to "wrap"
+      const centerX = rect.width/2, baseY = rect.height - 48;
+      const dx = (x-5) - centerX, dy = (y-10) - baseY;
+      const angle = Math.atan2(dy, dx) * 180/Math.PI + 90;
+      const length = Math.sqrt(dx*dx + dy*dy);
+
       const stem = document.createElement('div');
       stem.className = 'bouquet-stem';
-      let deg = (angle * 180 / Math.PI) + 90;
-      stem.style.transform = `rotate(${deg-90}deg)`;
-      stems.appendChild(stem);
-    }
+      stem.style.height = (length < 40 ? 40 : length) + 'px';
+      stem.style.left = (x-5) + 'px';
+      stem.style.bottom = '48px';
+      stem.style.transform = `rotate(${angle}deg)`;
+      dropzone.appendChild(stem);
+
+      dragFlower = null;
+    });
+
     function clearBouquet() {
-      document.getElementById('bouquetCluster').innerHTML = '';
-      document.getElementById('bouquetStems').innerHTML = '';
+      // Remove all placed flowers and stems (but not wrap)
+      const dropzone = document.getElementById('bouquetDropzone');
+      [...dropzone.querySelectorAll('.bouquet-flower-draggable, .bouquet-stem')].forEach(e => e.remove());
     }
   </script>
 </body>
