@@ -56,23 +56,12 @@
     .spotify-embed {
       margin: 36px 0;
     }
-    /* Bouquet Maker Styles (NEW) */
+    /* Bouquet Maker Styles */
     .bouquet-section-title {
       color: #e75480;
       margin-top: 38px;
       font-size: 1.35rem;
       letter-spacing: 1px;
-    }
-    .bouquet-container {
-      margin: 20px auto 0 auto;
-      min-height: 135px;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      gap: 10px;
-      min-width: 180px;
-      min-height: 120px;
-      flex-wrap: wrap;
     }
     .flower-btns {
       margin: 17px auto 8px auto;
@@ -95,23 +84,6 @@
       background: #ffd1eb;
       border-color: #c93e68;
     }
-    .stem {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 0 2px;
-    }
-    .stem-rect {
-      width: 6px;
-      height: 45px;
-      background: #40b551;
-      border-radius: 4px;
-      margin-bottom: -7px;
-    }
-    .flower-emoji {
-      font-size: 2.2rem;
-      filter: drop-shadow(0 2px 8px #ee6d8b44);
-    }
     .clear-btn {
       margin: 14px auto 18px auto;
       display: block;
@@ -127,6 +99,55 @@
     }
     .clear-btn:hover {
       background: #c93e68;
+    }
+    /* Bouquet Display */
+    .bouquet-display {
+      position: relative;
+      width: 190px;
+      height: 180px;
+      margin: 24px auto 0 auto;
+      display: flex;
+      justify-content: center;
+    }
+    .bouquet-cluster {
+      position: absolute;
+      left: 0; top: 0;
+      width: 190px;
+      height: 110px;
+      z-index: 2;
+    }
+    .bouquet-flower {
+      position: absolute;
+      font-size: 2.8rem;
+      filter: drop-shadow(0 2px 8px #ee6d8b44);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.2s;
+    }
+    .bouquet-stems {
+      position: absolute;
+      left: 94px; top: 80px;
+      width: 42px;
+      height: 80px;
+      z-index: 1;
+    }
+    .bouquet-stem {
+      position: absolute;
+      left: 14px;
+      width: 8px;
+      height: 74px;
+      background: linear-gradient(180deg, #63c551 80%, #5c4f3c 100%);
+      border-radius: 6px;
+      filter: blur(0.1px);
+    }
+    .bouquet-wrap {
+      position: absolute;
+      left: 58px; top: 124px;
+      width: 60px; height: 32px;
+      background: #f9e9fa;
+      border-radius: 20px 20px 50px 50px;
+      border: 3px solid #e6c3d0;
+      z-index: 3;
     }
   </style>
 </head>
@@ -154,7 +175,6 @@
   <div class="spotify-embed">
     <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/4eyLx49mYcIkl7AIGsKtTn?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
   </div>
-
   <div>
     <div class="bouquet-section-title">Make your own bouquet, Mana! 💐</div>
     <div class="flower-btns">
@@ -166,27 +186,42 @@
       <button class="flower-btn" onclick="addFlower('🌸')">🌸 Sakura</button>
       <button class="flower-btn" onclick="addFlower('🌼')">🌼 Daisy</button>
     </div>
-    <div class="bouquet-container" id="bouquet"></div>
+    <div class="bouquet-display">
+      <div class="bouquet-cluster" id="bouquetCluster"></div>
+      <div class="bouquet-stems" id="bouquetStems"></div>
+      <div class="bouquet-wrap"></div>
+    </div>
     <button class="clear-btn" onclick="clearBouquet()">Clear Bouquet</button>
   </div>
+
   <script>
     function addFlower(emoji) {
-      const bouquet = document.getElementById('bouquet');
-      const stem = document.createElement('div');
-      stem.className = 'stem';
-      const stemRect = document.createElement('div');
-      stemRect.className = 'stem-rect';
+      const cluster = document.getElementById('bouquetCluster');
+      const stems = document.getElementById('bouquetStems');
+      const flowersCount = cluster.children.length;
+      // Flowers arranged in a circular cluster for a real bouquet look
+      const max = 10, radius = 44;
+      let angle = ((flowersCount % max) / max) * 2 * Math.PI - Math.PI / 2;
+      let cx = 82 + radius * Math.cos(angle), cy = 44 + radius * Math.sin(angle);
+      // Flower (top)
       const flower = document.createElement('div');
-      flower.className = 'flower-emoji';
+      flower.className = 'bouquet-flower';
       flower.textContent = emoji;
-      stem.appendChild(stemRect);
-      stem.appendChild(flower);
-      bouquet.appendChild(stem);
+      flower.style.left = `${cx}px`;
+      flower.style.top = `${cy}px`;
+      flower.style.transform = `rotate(${(Math.random()-0.5)*26}deg) scale(1.08)`;
+      cluster.appendChild(flower);
+      // Stem (goes to center-bottom)
+      const stem = document.createElement('div');
+      stem.className = 'bouquet-stem';
+      let deg = (angle * 180 / Math.PI) + 90;
+      stem.style.transform = `rotate(${deg-90}deg)`;
+      stems.appendChild(stem);
     }
     function clearBouquet() {
-      document.getElementById('bouquet').innerHTML = '';
+      document.getElementById('bouquetCluster').innerHTML = '';
+      document.getElementById('bouquetStems').innerHTML = '';
     }
   </script>
-
 </body>
 </html>
