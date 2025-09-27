@@ -56,6 +56,78 @@
     .spotify-embed {
       margin: 36px 0;
     }
+    /* Bouquet Maker Styles (NEW) */
+    .bouquet-section-title {
+      color: #e75480;
+      margin-top: 38px;
+      font-size: 1.35rem;
+      letter-spacing: 1px;
+    }
+    .bouquet-container {
+      margin: 20px auto 0 auto;
+      min-height: 135px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 10px;
+      min-width: 180px;
+      min-height: 120px;
+      flex-wrap: wrap;
+    }
+    .flower-btns {
+      margin: 17px auto 8px auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+    }
+    .flower-btn {
+      background: #fff;
+      border: 2px solid #e75480;
+      border-radius: 8px;
+      font-size: 2rem;
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: transform 0.12s, background 0.15s;
+    }
+    .flower-btn:hover {
+      transform: scale(1.10);
+      background: #ffd1eb;
+      border-color: #c93e68;
+    }
+    .stem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 2px;
+    }
+    .stem-rect {
+      width: 6px;
+      height: 45px;
+      background: #40b551;
+      border-radius: 4px;
+      margin-bottom: -7px;
+    }
+    .flower-emoji {
+      font-size: 2.2rem;
+      filter: drop-shadow(0 2px 8px #ee6d8b44);
+    }
+    .clear-btn {
+      margin: 14px auto 18px auto;
+      display: block;
+      background: #e75480;
+      color: #fff;
+      font-size: 1rem;
+      padding: 8px 22px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0px 3px 14px #e7548040;
+      transition: background 0.18s;
+    }
+    .clear-btn:hover {
+      background: #c93e68;
+    }
   </style>
 </head>
 <body>
@@ -82,7 +154,39 @@
   <div class="spotify-embed">
     <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/4eyLx49mYcIkl7AIGsKtTn?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
   </div>
+
+  <div>
+    <div class="bouquet-section-title">Make your own bouquet, Mana! 💐</div>
+    <div class="flower-btns">
+      <button class="flower-btn" onclick="addFlower('🌹')">🌹 Rose</button>
+      <button class="flower-btn" onclick="addFlower('🌻')">🌻 Sunflower</button>
+      <button class="flower-btn" onclick="addFlower('🌷')">🌷 Tulip</button>
+      <button class="flower-btn" onclick="addFlower('💐')">💐 Mixed</button>
+      <button class="flower-btn" onclick="addFlower('🥀')">🥀 Love</button>
+      <button class="flower-btn" onclick="addFlower('🌸')">🌸 Sakura</button>
+      <button class="flower-btn" onclick="addFlower('🌼')">🌼 Daisy</button>
+    </div>
+    <div class="bouquet-container" id="bouquet"></div>
+    <button class="clear-btn" onclick="clearBouquet()">Clear Bouquet</button>
+  </div>
+  <script>
+    function addFlower(emoji) {
+      const bouquet = document.getElementById('bouquet');
+      const stem = document.createElement('div');
+      stem.className = 'stem';
+      const stemRect = document.createElement('div');
+      stemRect.className = 'stem-rect';
+      const flower = document.createElement('div');
+      flower.className = 'flower-emoji';
+      flower.textContent = emoji;
+      stem.appendChild(stemRect);
+      stem.appendChild(flower);
+      bouquet.appendChild(stem);
+    }
+    function clearBouquet() {
+      document.getElementById('bouquet').innerHTML = '';
+    }
+  </script>
+
 </body>
 </html>
-
-
